@@ -116,7 +116,7 @@ All foods are distributed among various categories. Use common sense.
 				M.changeNext_move(CLICK_CD_MELEE * 0.5) //nom nom nom
 		else
 			if(!isbrain(M))		//If you're feeding it to someone else.
-				if(fullness <= (6000 * (1 + M.overeatduration / 1000)))
+				if(fullness <= (3000 * (1 + M.overeatduration / 1000)))
 					M.visible_message("<span class='danger'>[user] attempts to feed [M] [src].</span>", \
 										"<span class='userdanger'>[user] attempts to feed [M] [src].</span>")
 				else
