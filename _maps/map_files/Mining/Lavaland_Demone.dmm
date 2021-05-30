@@ -19,7 +19,7 @@
 "lO" = (/obj/structure/table/wood,/turf/open/floor/wood,/area/ruin/powered)
 "ni" = (/turf/closed/wall/mineral/plastitanium,/area/ruin/powered)
 "nJ" = (/turf/open/floor/plasteel/freezer,/area/ruin/powered)
-"pH" = (/obj/structure/ladder/unbreakable{height = -1; id = infected},/turf/open/floor/bluespace,/area/lavaland/surface/outdoors)
+"pH" = (/obj/structure/ladder/unbreakable{height = -1; id = demone},/turf/open/floor/bluespace,/area/lavaland/surface/outdoors)
 "pJ" = (/obj/machinery/washing_machine,/turf/open/floor/plasteel/freezer,/area/ruin/powered)
 "pV" = (/obj/structure/bed,/obj/effect/spawner/lootdrop/bedsheet,/turf/open/floor/wood,/area/ruin/powered)
 "qk" = (/turf/closed/mineral/random/high_chance,/area/lavaland/surface/outdoors)

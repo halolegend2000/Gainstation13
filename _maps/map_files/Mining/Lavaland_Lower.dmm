@@ -840,7 +840,7 @@
 "qh" = (/obj/structure/door_assembly/door_assembly_atmo{dir = 4; name = "Facility Storage"},/turf/open/floor/plating{initial_gas_mix = "o2=14;n2=23;TEMP=300"},/area/lavaland/surface/outdoors)
 "qi" = (/obj/structure/door_assembly/door_assembly_mhatch{name = "Strange Facility Airlock"},/turf/open/floor/plating{initial_gas_mix = "o2=14;n2=23;TEMP=300"},/area/lavaland/surface/outdoors)
 "qj" = (/obj/structure/table,/obj/effect/spawner/lootdrop/maintenance{lootcount = 2},/turf/open/floor/plating{initial_gas_mix = "o2=14;n2=23;TEMP=300"},/area/lavaland/surface/outdoors)
-"qk" = (/obj/structure/ladder/unbreakable{height = 1},/turf/open/floor/plating,/area/xenoarch/gen)
+"qk" = (/obj/structure/ladder/unbreakable{height = 1; id = demone},/turf/open/floor/plating,/area/xenoarch/gen)
 "ql" = (/obj/item/candle/infinite{anchored = 1},/turf/open/floor/plating,/area/xenoarch/gen)
 "AF" = (/obj/structure/closet/firecloset,/turf/open/floor/plating{initial_gas_mix = "o2=14;n2=23;TEMP=300"},/area/xenoarch/gen)
 "Hx" = (/turf/open/floor/carpet,/area/xenoarch/gen)
