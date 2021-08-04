@@ -511,6 +511,8 @@
 	SetSleeping(0, FALSE)
 	radiation = 0
 	nutrition = NUTRITION_LEVEL_FED + 50
+	fullness = FULLNESS_LEVEL_HALF_FULL // GS13
+	fatness = 0 // GS13
 	bodytemperature = BODYTEMP_NORMAL
 	set_blindness(0)
 	set_blurriness(0)

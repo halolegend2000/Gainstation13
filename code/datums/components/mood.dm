@@ -167,6 +167,7 @@
 	holdmyinsanityeffect = insanity_effect
 
 	HandleNutrition(owner)
+	HandleFatness(owner)
 
 /datum/component/mood/proc/setSanity(amount, minimum=SANITY_INSANE, maximum=SANITY_NEUTRAL)//I'm sure bunging this in here will have no negative repercussions.
 	var/mob/living/master = parent
@@ -296,11 +297,14 @@
 	print_mood(user)
 
 
+/datum/component/mood/proc/HandleFatness(mob/living/L)
+	switch(L.fatness)
+		if(FATNESS_LEVEL_FAT to INFINITY)
+			add_event(null, "fatness", /datum/mood_event/fat)
+
 /datum/component/mood/proc/HandleNutrition(mob/living/L)
 	switch(L.nutrition)
-		if(NUTRITION_LEVEL_FULL to INFINITY)
-			add_event(null, "nutrition", /datum/mood_event/fat)
-		if(NUTRITION_LEVEL_WELL_FED to NUTRITION_LEVEL_FULL)
+		if(NUTRITION_LEVEL_WELL_FED to INFINITY)
 			add_event(null, "nutrition", /datum/mood_event/wellfed)
 		if( NUTRITION_LEVEL_FED to NUTRITION_LEVEL_WELL_FED)
 			add_event(null, "nutrition", /datum/mood_event/fed)

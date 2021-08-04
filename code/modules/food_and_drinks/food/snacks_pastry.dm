@@ -85,6 +85,14 @@
 	extra_reagent = "cherryjelly"
 	foodtype = JUNKFOOD | GRAIN | FRIED | FRUIT
 
+/obj/item/reagent_containers/food/snacks/donut/purefat //DEBUG DONUT THAT MAKES YOU FAT
+	name = "Donut-that-makes-you-fat"
+	desc = "Careful, it'll go to your hips"
+	bitesize = 9999
+	list_reagents = list("nutriment" = 9999)
+	icon_state = "donut1"
+	foodtype = JUNKFOOD | GRAIN | FRIED | SUGAR
+
 /obj/item/reagent_containers/food/snacks/donut/meat
 	bonus_reagents = list("ketchup" = 1)
 	list_reagents = list("nutriment" = 3, "ketchup" = 2)

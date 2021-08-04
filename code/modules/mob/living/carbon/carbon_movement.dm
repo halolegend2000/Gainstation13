@@ -39,7 +39,9 @@
 	if(. && mob_has_gravity()) //floating is easy
 		if(HAS_TRAIT(src, TRAIT_NOHUNGER))
 			nutrition = NUTRITION_LEVEL_FED - 1	//just less than feeling vigorous
-		else if(nutrition && stat != DEAD)
-			nutrition -= HUNGER_FACTOR/10
-			if(m_intent == MOVE_INTENT_RUN)
-				nutrition -= HUNGER_FACTOR/10
+		else if(nutrition && stat != DEAD) // GS13 : one fourth of the consumed energy comes from fat
+			var/fat_burned = min(HUNGER_FACTOR/40, fatness)
+			if(m_intent == MOVE_INTENT_RUN) // GS13 : running will burn more fat (won't make you more tired tho)
+				fat_burned = min(HUNGER_FACTOR/20, fatness)
+			nutrition -= (HUNGER_FACTOR/10 - fat_burned)
+			fatness -= fat_burned

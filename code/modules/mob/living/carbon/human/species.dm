@@ -1222,13 +1222,13 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 	//The fucking TRAIT_FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
 	if(HAS_TRAIT(H, TRAIT_FAT))//I share your pain, past coder.
-		if(H.overeatduration < 100)//this is a mess, indeed.
-			to_chat(H, "<span class='notice'>You feel fit again!</span>")
+		if(H.fatness < FATNESS_LEVEL_FAT)//this is a mess, indeed.
+			to_chat(H, "<span class='notice'>You feel fit again!</span>")//GS13 was it that complex?
 			REMOVE_TRAIT(H, TRAIT_FAT, OBESITY)
 			H.update_inv_w_uniform()
 			H.update_inv_wear_suit()
 	else
-		if(H.overeatduration >= 100)
+		if(H.fatness >= FATNESS_LEVEL_FAT)
 			to_chat(H, "<span class='danger'>You suddenly feel blubbery!</span>")
 			ADD_TRAIT(H, TRAIT_FAT, OBESITY)
 			H.update_inv_w_uniform()
@@ -1258,15 +1258,17 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		H.nutrition = max(0, H.nutrition - hunger_rate)
 
 
-	if (H.nutrition > NUTRITION_LEVEL_FULL)
+	if (H.nutrition > NUTRITION_LEVEL_FULL)//GS13 fattening rate of 1 per tick spent overfed
+		nutrition -= 1
+		fatness += 1
 		if(H.overeatduration < 5000) //capped so people don't take forever to unfat
 			H.overeatduration++
 	else
 		if(H.overeatduration > 1)
-			H.overeatduration -= 2 //doubled the unfat rate
+			H.overeatduration -= 1 //doubled the unfat rate -- GS13 Nah, put it back
 
 	//metabolism change
-	if(H.nutrition > NUTRITION_LEVEL_FAT)
+	if(H.nutrition > NUTRITION_LEVEL_FULL +100)
 		H.metabolism_efficiency = 1
 	else if(H.nutrition > NUTRITION_LEVEL_FED && H.satiety > 80)
 		if(H.metabolism_efficiency != 1.25 && !HAS_TRAIT(H, TRAIT_NOHUNGER))
@@ -1282,22 +1284,26 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		H.metabolism_efficiency = 1
 
 	switch(H.nutrition)
-		if(NUTRITION_LEVEL_BLOB to INFINITY)
-			H.throw_alert("nutrition", /obj/screen/alert/blob)
-		if(NUTRITION_LEVEL_IMMOBILE to NUTRITION_LEVEL_BLOB)
-			H.throw_alert("nutrition", /obj/screen/alert/immobile)
-		if(NUTRITION_LEVEL_MORBIDLY_OBESE to NUTRITION_LEVEL_IMMOBILE)
-			H.throw_alert("nutrition", /obj/screen/alert/morbidlyobese)
-		if(NUTRITION_LEVEL_OBESE to NUTRITION_LEVEL_MORBIDLY_OBESE)
-			H.throw_alert("nutrition", /obj/screen/alert/obese)
-		if(NUTRITION_LEVEL_FULL to NUTRITION_LEVEL_OBESE)
-			H.throw_alert("nutrition", /obj/screen/alert/fat)
 		if(NUTRITION_LEVEL_HUNGRY to NUTRITION_LEVEL_FULL)
 			H.clear_alert("nutrition")
 		if(NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_HUNGRY)
 			H.throw_alert("nutrition", /obj/screen/alert/hungry)
 		if(0 to NUTRITION_LEVEL_STARVING)
 			H.throw_alert("nutrition", /obj/screen/alert/starving)
+
+	switch(H.fatness)
+		if(FATNESS_LEVEL_BLOB to INFINITY)
+			H.throw_alert("fatness", /obj/screen/alert/blob)
+		if(FATNESS_LEVEL_IMMOBILE to FATNESS_LEVEL_BLOB)
+			H.throw_alert("fatness", /obj/screen/alert/immobile)
+		if(FATNESS_LEVEL_MORBIDLY_OBESE to FATNESS_LEVEL_IMMOBILE)
+			H.throw_alert("fatness", /obj/screen/alert/morbidlyobese)
+		if(FATNESS_LEVEL_OBESE to FATNESS_LEVEL_MORBIDLY_OBESE)
+			H.throw_alert("fatness", /obj/screen/alert/obese)
+		if(FATNESS_LEVEL_FAT to FATNESS_LEVEL_OBESE)
+			H.throw_alert("fatness", /obj/screen/alert/fat)
+		if(0 to FATNESS_LEVEL_FAT)
+			H.clear_alert("fatness")
 
 /datum/species/proc/update_health_hud(mob/living/carbon/human/H)
 	return 0
