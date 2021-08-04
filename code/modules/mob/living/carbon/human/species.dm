@@ -1259,8 +1259,8 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 
 	if (H.nutrition > NUTRITION_LEVEL_FULL)//GS13 fattening rate of 1 per tick spent overfed
-		nutrition -= 1
-		fatness += 1
+		H.nutrition -= 1
+		H.fatness += 1
 		if(H.overeatduration < 5000) //capped so people don't take forever to unfat
 			H.overeatduration++
 	else
