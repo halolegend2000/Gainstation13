@@ -1219,7 +1219,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	////////
 
 /datum/species/proc/handle_digestion(mob/living/carbon/human/H)
-
+	
 	//The fucking TRAIT_FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
 	if(HAS_TRAIT(H, TRAIT_FAT))//I share your pain, past coder.
 		if(H.fatness < FATNESS_LEVEL_FAT)//this is a mess, indeed.
@@ -1261,6 +1261,10 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	if (H.nutrition > NUTRITION_LEVEL_FULL)//GS13 fattening rate of 1 per tick spent overfed
 		H.nutrition -= 1
 		H.fatness += 1
+	var/ticksToEmptyStomach = 20 // GS13 how many ticks it takes to decrease the fullness by 1
+	if(H.fullness > FULLNESS_LEVEL_EMPTY)//GS13 stomach-emptying routine
+		H.fullness -= 1/ticksToEmptyStomach
+	if (H.fullness > FULLNESS_LEVEL_BLOATED) //GS13 overeating depends on fullness now
 		if(H.overeatduration < 5000) //capped so people don't take forever to unfat
 			H.overeatduration++
 	else
