@@ -1223,8 +1223,60 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	//The fucking TRAIT_FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
 	if(HAS_TRAIT(H, TRAIT_FAT))//I share your pain, past coder.
 		if(H.fatness < FATNESS_LEVEL_FAT)//this is a mess, indeed.
-			to_chat(H, "<span class='notice'>You feel fit again!</span>")//GS13 was it that complex?
+			to_chat(H, "<span class='notice'>You feel fit again!</span>")//GS13 Added a whole bunch of new fatness traits. Truly I am a masochist
 			REMOVE_TRAIT(H, TRAIT_FAT, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+		else if(H.fatness >= FATNESS_LEVEL_OBESE)
+			to_chat(H, "<span class='danger'>You feel even plumper!</span>")
+			REMOVE_TRAIT(H, TRAIT_FAT, OBESITY)
+			ADD_TRAIT(H, TRAIT_OBESE, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+	else if(HAS_TRAIT(H, TRAIT_OBESE))
+		if(H.fatness < FATNESS_LEVEL_OBESE)
+			to_chat(H, "<span class='notice'>You feel like you've lost weight!</span>")
+			REMOVE_TRAIT(H, TRAIT_OBESE, OBESITY)
+			ADD_TRAIT(H, TRAIT_FAT, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+		else if(H.fatness >= FATNESS_LEVEL_MORBIDLY_OBESE)
+			to_chat(H, "<span class='danger'>You feel a lot fatter than before</span>")
+			REMOVE_TRAIT(H, TRAIT_OBESE, OBESITY)
+			ADD_TRAIT(H, TRAIT_MORBIDLYOBESE, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+	else if(HAS_TRAIT(H, TRAIT_MORBIDLYOBESE))
+		if(H.fatness < FATNESS_LEVEL_MORBIDLY_OBESE)
+			to_chat(H, "<span class='notice'>You feel a bit less fat!</span>")
+			REMOVE_TRAIT(H, TRAIT_MORBIDLYOBESE, OBESITY)
+			ADD_TRAIT(H, TRAIT_OBESE, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+		else if(H.fatness >= FATNESS_LEVEL_IMMOBILE)
+			to_chat(H, "<span class='danger'>You feel your fat belly rubbing on the floor!</span>")
+			REMOVE_TRAIT(H, TRAIT_MORBIDLYOBESE, OBESITY)
+			ADD_TRAIT(H, TRAIT_IMMOBILE, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()	
+	else if(HAS_TRAIT(H, TRAIT_IMMOBILE))
+		if(H.fatness < FATNESS_LEVEL_IMMOBILE)
+			to_chat(H, "<span class='notice'>You feel less restrained by your fat!</span>")
+			REMOVE_TRAIT(H, TRAIT_IMMOBILE, OBESITY)
+			ADD_TRAIT(H, TRAIT_MORBIDLYOBESE, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+		else if(H.fatness >= FATNESS_LEVEL_BLOB)
+			to_chat(H, "<span class='danger'>You feel like you've become a mountain of fat!</span>")
+			REMOVE_TRAIT(H, TRAIT_IMMOBILE, OBESITY)
+			ADD_TRAIT(H, TRAIT_BLOB, OBESITY)
+			H.update_inv_w_uniform()
+			H.update_inv_wear_suit()
+	else if(HAS_TRAIT(H, TRAIT_BLOB))
+		if(H.fatness < FATNESS_LEVEL_BLOB)
+			to_chat(H, "<span class='notice'>You feel like you've regained some mobility!</span>")
+			REMOVE_TRAIT(H, TRAIT_BLOB, OBESITY)
+			ADD_TRAIT(H, TRAIT_IMMOBILE, OBESITY)
 			H.update_inv_w_uniform()
 			H.update_inv_wear_suit()
 	else
@@ -1233,6 +1285,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 			ADD_TRAIT(H, TRAIT_FAT, OBESITY)
 			H.update_inv_w_uniform()
 			H.update_inv_wear_suit()
+
 
 	// nutrition decrease and satiety
 	if (H.nutrition > 0 && H.stat != DEAD && !HAS_TRAIT(H, TRAIT_NOHUNGER))
@@ -1258,11 +1311,13 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		H.nutrition = max(0, H.nutrition - hunger_rate)
 
 
-	if (H.nutrition > NUTRITION_LEVEL_FULL)//GS13 fattening rate of 1 per tick spent overfed
-		H.nutrition -= 1
-		H.fatness += 1
-	var/ticksToEmptyStomach = 20 // GS13 how many ticks it takes to decrease the fullness by 1
+	if (H.nutrition > NUTRITION_LEVEL_FULL)
+		var/fatConversionRate = 5 //GS13 what percentage of the excess nutrition should go to fat (total nutrition to transfer can't be under 1)
+		var/nutritionThatBecomesFat = min((H.nutrition - NUTRITION_LEVEL_FULL)*(fatConversionRate / 100),1)
+		H.nutrition -= nutritionThatBecomesFat
+		H.fatness += nutritionThatBecomesFat
 	if(H.fullness > FULLNESS_LEVEL_EMPTY)//GS13 stomach-emptying routine
+		var/ticksToEmptyStomach = 20 // GS13 how many ticks it takes to decrease the fullness by 1
 		H.fullness -= 1/ticksToEmptyStomach
 	if (H.fullness > FULLNESS_LEVEL_BLOATED) //GS13 overeating depends on fullness now
 		if(H.overeatduration < 5000) //capped so people don't take forever to unfat
@@ -1294,6 +1349,17 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 			H.throw_alert("nutrition", /obj/screen/alert/hungry)
 		if(0 to NUTRITION_LEVEL_STARVING)
 			H.throw_alert("nutrition", /obj/screen/alert/starving)
+
+	switch(H.fullness)
+		if(0 to FULLNESS_LEVEL_BLOATED)
+			H.clear_alert("fullness")
+		if(FULLNESS_LEVEL_BLOATED to FULLNESS_LEVEL_BEEG)
+			H.throw_alert("fullness", /obj/screen/alert/bloated)
+		if(FULLNESS_LEVEL_BEEG to FULLNESS_LEVEL_NOMOREPLZ)
+			H.throw_alert("fullness", /obj/screen/alert/stuffed)
+		if(FULLNESS_LEVEL_NOMOREPLZ to INFINITY)
+			H.throw_alert("fullness", /obj/screen/alert/beegbelly)
+
 
 	switch(H.fatness)
 		if(FATNESS_LEVEL_BLOB to INFINITY)
@@ -1426,6 +1492,12 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 		if(HAS_TRAIT(H, TRAIT_FAT))
 			. += (1.5 - flight)
+		if(HAS_TRAIT(H, TRAIT_OBESE))//GS13 fat levels move speed decrease
+			. += (2.5 - flight)
+		if(HAS_TRAIT(H, TRAIT_MORBIDLYOBESE))
+			. += (3.5 - flight)
+		if(HAS_TRAIT(H, TRAIT_IMMOBILE))
+			. += 5 // No wings are going to lift that much off the ground
 		if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT && !HAS_TRAIT(H, TRAIT_RESISTCOLD))
 			. += (BODYTEMP_COLD_DAMAGE_LIMIT - H.bodytemperature) / COLD_SLOWDOWN_FACTOR
 	return .

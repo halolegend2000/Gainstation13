@@ -227,6 +227,14 @@
 	if(pulledby && pulledby.grab_state)
 		msg += "[t_He] [t_is] restrained by [pulledby]'s grip.\n"
 
+	switch(fullness)
+		if(FULLNESS_LEVEL_BLOATED to FULLNESS_LEVEL_BEEG)
+			msg += "[t_He] look[p_s()] like [t_He] ate a bit too much.\n"
+		if(FULLNESS_LEVEL_BEEG to FULLNESS_LEVEL_NOMOREPLZ)
+			msg += "[t_His] stomach looks very round and very full.\n"
+		if(FULLNESS_LEVEL_NOMOREPLZ to INFINITY)
+			msg += "[t_His] stomach has been stretched to enormous proportions.\n"
+
 	if(nutrition < NUTRITION_LEVEL_STARVING - 50)
 		msg += "[t_He] [t_is] severely malnourished.\n"
 	if(fatness >= FATNESS_LEVEL_IMMOBILE)
