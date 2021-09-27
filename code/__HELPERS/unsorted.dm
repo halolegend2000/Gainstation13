@@ -451,15 +451,9 @@ Turf and target are separate in case you want to teleport some distance from a t
 	var/y = min(world.maxy, max(1, A.y + dy))
 	return locate(x,y,A.z)
 
-#if DM_VERSION > 513
-#warn if you're getting this warning it means 513 is stable
-#warn and you should remove this tidbit
-#endif
-#if DM_VERSION < 513
-/proc/arctan(x)
-	var/y=arcsin(x/sqrt(1+x*x))
-	return y
-#endif
+
+
+
 /*
 	Gets all contents of contents and returns them all in a list.
 */
@@ -1119,7 +1113,7 @@ B --><-- A
 
 /proc/get_random_station_turf()
 	return safepick(get_area_turfs(pick(GLOB.the_station_areas)))
-	
+
 /proc/get_safe_random_station_turf()
 	for (var/i in 1 to 5)
 		var/list/L = get_area_turfs(pick(GLOB.the_station_areas))
